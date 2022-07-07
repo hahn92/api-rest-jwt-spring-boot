@@ -32,48 +32,27 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
-    	/*
+    	
     	try {
-	    	// obtenemos el body de la peticion que asumimos viene en formato JSON
-	        InputStream body = req.getInputStream();
-	
-	        // Asumimos que el body tendra el siguiente JSON  {"username":"xxxx", "password":"xxxx"}
-	        // Realizamos un mapeo a nuestra clase User para tener ahi los datos
-
-	        List<GrantedAuthority> roles = new ArrayList<>();
+			// listado de perdimos de roles
+    		List<GrantedAuthority> roles = new ArrayList<>();
 			roles.add(new SimpleGrantedAuthority("ADMIN"));
-			
-	        Usuario user = new ObjectMapper().readValue(body, Usuario.class);
-	        
-	        
-	        // Finalmente autenticamos
-	        // Spring comparar el user/password recibidos
-	        // contra el que definimos en la clase SecurityConfig
-	        // el Collections.emptyList() es el lugar para los roles o authorities, pero no es necesario en este primer filtro
-	        return getAuthenticationManager().authenticate(
-	                new UsernamePasswordAuthenticationToken(
-	                        user.getUsername(),
-	                        user.getPassword(),
-	                        roles
-	                )
-	        );
-    	}
+			// parametros de autenticacion
+			String username = req.getParameter("username");
+			String password = req.getParameter("password");
+			// creacion de token
+			return authenticationManager.authenticate(
+		        new UsernamePasswordAuthenticationToken(
+		        	username,
+					password,
+					roles
+		        )
+			);
+	    }
     	catch (Exception e) {
     		System.out.print(e);
     		return null;
 		}
-    	*/
-    	List<GrantedAuthority> roles = new ArrayList<>();
-		roles.add(new SimpleGrantedAuthority("ADMIN"));
-        String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		return authenticationManager.authenticate(
-		        new UsernamePasswordAuthenticationToken(
-		        		username,
-		        		password,
-		        		roles
-		        	)
-				);
         
     }
 
