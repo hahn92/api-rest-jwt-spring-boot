@@ -3,12 +3,15 @@ package com.hahn.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hahn.config.ResponseHandler;
 import com.hahn.model.Tarjeta;
 import com.hahn.model.Usuario;
 import com.hahn.repo.ITarjetaRepo;
@@ -25,16 +28,18 @@ public class TarjetaController {
 	private IUsuarioRepo repou;
 	
 	@PostMapping
-	public void CardCreate(Tarjeta tar, Authentication auth) {
+	public ResponseEntity<Object> CardCreate(Tarjeta tar, Authentication auth) {
 		Usuario us = repou.findByUsername(auth.getPrincipal() + "");
 		List<Tarjeta> li = us.getCards();
 		li.add(tar);
 		repo.save(tar);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, true, "Tarjeta creada correctamente", true);
 	}
 	
 	@PutMapping
-	public void CardUpdate(Tarjeta tar, Authentication auth) {
+	public ResponseEntity<Object> CardUpdate(Tarjeta tar, Authentication auth) {
 		repo.save(tar);
+		return ResponseHandler.generateResponse(HttpStatus.OK, true, "Success", true);
 	}
 
 }

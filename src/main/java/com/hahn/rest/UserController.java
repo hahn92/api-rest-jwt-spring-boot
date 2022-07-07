@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,9 +34,10 @@ public class UserController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@PostMapping("/sing-up")
-	public void UserCreate(Usuario per) {
+	public ResponseEntity<Object> UserCreate(Usuario per) {
 		per.setPassword(bCryptPasswordEncoder.encode(per.getPassword()));
 		repo.save(per);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, true, "Usuario creado correctamente", true);
 	}
 	
 	@GetMapping
@@ -44,15 +47,15 @@ public class UserController {
 	}
 	
 	@PutMapping
-	public void UserUpdate(Usuario per) {
+	public ResponseEntity<Object> UserUpdate(Usuario per) {
 		repo.save(per);
+		return ResponseHandler.generateResponse(HttpStatus.OK, true, "Success", true);
 	}
 	
-	/*
 	@DeleteMapping(value = "/{id}")
-	public void UserDelete(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> UserDelete(@PathVariable Integer id) {
 		repo.deleteById(id);
+		return ResponseHandler.generateResponse(HttpStatus.OK, true, "Usuario Eleminado", true);
 	}
-	*/
-
+	
 }
